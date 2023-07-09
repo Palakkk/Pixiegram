@@ -1,0 +1,44 @@
+{% extends 'common.html' %}
+
+{% block content %}
+
+{% load static %}
+
+<!-- Edit about Modal -->
+<div class="container ">
+  <h2 class="text-center mt-5">Edit About</h2>
+  <div class="row justify-content-center">
+    <div class="profile-form col-lg-6">
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="study">Went to</label>
+          <input id="study" name="study" class="form-control" value="{{study}}">
+        </div>
+        <div class="form-group">
+          <label for="work">Work at</label>
+          <input id="work" name="work" class="form-control" value="{{work}}">
+        </div>
+        <div class="form-group">
+          <label for="live">Live in</label>
+          <input type="text" id="live" name="live" class="form-control" value="{{live}}">
+        </div>
+        <div class="form-group">
+          <label for="from">From</label>
+          <input type="text" id="ufrom" name="ufrom" class="form-control" value="{{ufrom }}">
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+{%if message%}
+<script>
+  alert("{{message}}");
+</script>
+{%endif%}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends 'common.html' %}
+
+{% block content %}
+
+{% load static %}
+
+<!-- NO USE ANYMORE -->
+
+
+
+<!-- <div class="container shadow">
+    <h2 class="text-center mt-5">Edit Profile</h2>
+    <div class="row justify-content-center">
+        <div class="profile-form col-lg-6">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% if portfolio_image %}
+                <div class="form-group text-center">
+                    <br>
+                    <img src="{{ portfolio_image.url }}" alt="Current Portfolio Image" width="140px" height="140px"
+                        class="rounded-circle mr-2 ">
+                </div>
+                {% endif %}
+                <div class="form-group">
+                    <label for="uname">Username:</label>
+                    <input id="uname" name="uname" class="form-control" value="{{uname }}"></input>
+                </div>
+                <div class="form-group">
+                    <label for="bio">Bio:</label>
+                    <textarea id="bio" name="bio" class="form-control" value="{{bio}}">{{bio}}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone:</label>
+                    <input type="text" id="phone" name="phone" class="form-control" value="{{phone }}">
+                </div>
+                <div class="form-group">
+                    <label for="portfolio_image">Portfolio Image:</label>
+                    <input type="file" id="portfolio_img" name="portfolio_img" accept="image/*">
+                </div>
+                <div class="form-group">
+                    <label for="portfolio_image">Background Image:</label>
+                    <input type="file" id="bg_img" name="bg_img" accept="image/*">
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+        </div>
+    </div>
+</div> -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+{% endblock %}

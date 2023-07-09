@@ -1,0 +1,107 @@
+/* navAVBAR---------- */
+/* #navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+} */
+body{
+  background-color: whitesmoke;
+}
+#left-section{
+  /* top: 80px; */
+  overflow: hidden;
+}
+#middle-section{
+  /* top: 80px; */
+  height: calc(100vh - 151px) ;
+  overflow: auto;
+}
+
+/* #right-section{
+  top: 80px;
+} */
+#bg-img{
+  height:436px; 
+  background-size: cover;
+  margin:-15px;
+}
+.text-shadow {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+}
+#pro_pic { 
+  position: relative;
+  object-fit: cover;
+  overflow: hidden;
+} 
+.font-increase{
+  font-size: 1.2rem;
+}
+/* Like button--------- */
+.unlike-button {
+  color:red;
+  /* background: red; */
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+.unlike-button:hover {
+  color:grey;
+  background: none;
+  border: none;
+  padding-right: 4px;
+  cursor: pointer;
+}
+.like-button{
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+.like-button:hover{
+  color:red;
+  background:none;
+  border: none;
+  padding-right: 4px;
+  cursor: pointer;
+}
+.like-number:hover{
+  color: grey;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.comment-button{
+  color:rgb(56, 179, 255);
+  /* background: none; */
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+.comment-button:hover{
+  color:rgb(56, 179, 255);
+  background:none ;
+  border: none;
+  padding: 0 4px;
+  cursor: pointer;
+}
+/* ------------------------ */
+
+.custom-toggler {
+  border:none; /* Customize the border color */
+}
+
+.custom-toggler:hover {
+  border:none; /* Customize the hover state border color */
+}
+
+@media (max-width: 768px) {
+  #left-section, #right-section{
+      display: none;
+  }
+}
+@media (max-width: 768px) {
+  .container {
+      min-width: 576px;
+  }
+}

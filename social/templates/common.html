@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+        <title>Pixegram</title>
+    </head>
+
+    <body>
+
+
+        <!-------------------------------NAvigation Starts------------------>
+        <div class="container px-1">
+            <nav class="navbar navbar-expand-md navbar-dark mb-2" id="navbar" style="background-color:#073b4c">
+                <a class="navbar-brand" href="#"><img src="/media/logo.png" alt="" class="my-n3  ml-n2 "></a>
+                {% if data.portfolio_img %}
+                <div class="ml-auto d-none ">
+                    <a href="{% url 'profile1' request.session.user_id %}">
+                        <img src="{{data.portfolio_img.url}}" alt="" class="rounded-circle ml-3" id="pro_pic"
+                            width="35px" height="35px">
+                    </a>
+                </div>
+                {% endif %}
+                <button class="navbar-toggler custom-toggler" type="button" data-toggle="collapse" data-target="#responsive"
+                    aria-controls="responsive" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="responsive">
+                    {% if 'email' in request.session and 'user_id' in request.session %}
+                    <ul class="navbar-nav mr-auto text-capitalize font-weight-bold font-increase">
+                        <li class="nav-item"><a href="{% url 'index' %}" class="nav-link">home</a></li>
+                        <li class="nav-item"><a href="{% url 'profile1' request.session.user_id %}"
+                                class="nav-link">profile</a></li>
+                        <li class="nav-item"><a href="{% url 'logout1' %}" class="nav-link">logout</a></li>
+                    </ul>
+                    <form method="GET" action="{% url 'search_profile' %}" class="form-inline ml-auto d-md-block py-2">
+                        <input type="hidden" name="search" value="{{ request.GET.search }}">
+                        <input type="text" name="q" id="search" placeholder="Search"
+                        class="form-control form-control-sm" value="{{ request.GET.q }}">
+                    </form>
+                    {% endif %}
+                    <!-- {% if data.portfolio_img %}
+                        <a href="{% url 'profile1' request.session.user_id %}">
+                            <img src="{{data.portfolio_img.url}}" alt="" class="rounded-circle ml-3" id="pro_pic" width="35px" height="35px">
+                        </a>
+                    {% endif %} -->
+                </div>
+            </nav>
+        </div>
+
+        <!---------------------------------------------Ends navigation------------------------------>
+
+        <!---------------------------MOdal Section  satrts------------------->
+        <div>
+
+
+            <!-------------------------------MOdal Ends---------------------------->
+
+            {% block content %}
+
+            {% endblock %}
+        </div>
+    </body>
+
+</html>

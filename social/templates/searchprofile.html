@@ -1,0 +1,248 @@
+{% extends 'common.html' %}
+
+{% block content %}
+
+{% load static %}
+
+<!-----------------------------------Banner/img Starts-------------------->
+
+
+<div class="container shadow">
+    <div class="row">
+        <div class="card col-12 py-3">
+            <div class="banner py-1 d-flex flex-column justify-content-between " id="bg-img"
+                style="background-image: url('{{results_user.bg_img.url}}');">
+
+                <div class="banner-title text-center py-4">
+                    {% if results_user.portfolio_img %}
+                    <img src="{{results_user.portfolio_img.url}}" alt="img" class="rounded-circle" id="pro_pic"
+                        width="120px" height="120px">
+                    {%else%}
+                    <img src="{{results_user.bg_img.url}}" alt="img" class="rounded-circle" id="pro_pic" width="150px"
+                        height="150px">
+                    {% endif %}
+                    <h2 class="text-light text-shadow display-6">{{results_user.name}}</h2>
+                    <p class="text-light text-shadow font-increase">{{results_user.bio}}</p>
+
+                </div>
+                <div class="text-right pr-5">
+                    <form action="/follow" method="POST">
+                        {% csrf_token %}
+                        <div class="add-btn">
+
+                            {% if user_followers == 0 or user_followers == 1 %}
+                            <span style="color: white; font-size: 25px;"><b>{{user_followers}} follower </b></span>
+                            {% else %}
+                            <span style="color: white; font-size: 25px;"><b>{{user_followers}} followers </b></span>
+                            {% endif %}
+                            <span style="color: white; font-size: 25px;"><b>{{user_following}} following</b></span>
+
+                            {% if results_user != data %}
+                            <input type="hidden" value="{{data.name}}" name="follower" />
+                            <input type="hidden" value="{{results_user.name}}" name="user" />
+                            <input type="hidden" value="{{q}}" name="q" />
+                            <br>
+                            <a data-ripple=""><button type="submit" class="btn btn-primary btn-lg"
+                                    style="background-color: #0b9deb; border: #0b9deb;">{{button_text}}</button></a>
+                            {% endif %}
+                        </div>
+                    </form>
+                </div>
+                <div class="banner-end d-flex pb-1 justify-content-center align-items-end font-increase">
+                    <ul class="nav text-light font-weight-bold">
+                        <li class="nav-item nav-link active" onclick="showSection('photos')" style="cursor: pointer;">
+                            Photos
+                        </li>
+                        <li class="nav-item nav-link" onclick="showSection('tweets')" style="cursor: pointer;">Tweets
+                        </li>
+                        <li class="nav-item nav-link" onclick="showSection('about')" style="cursor: pointer;">About</li>
+                        <li class="nav-item nav-link" onclick="showSection('friends')" style="cursor: pointer;">Friends
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!--------------------Image Portfolio----------------->
+
+        <div class="container py-4" id="photos-section">
+            <h4>Photos</h4>
+            <div class="row mt-3">
+                {% for i in results_post reversed %}
+                {%if i.post_image%}
+                <div class="col-md-4 mr-4">
+                    <div class="item">
+                        <a href="{{ i.post_image.url }}" data-lightbox="id">
+                            <img src="{{ i.post_image.url }}" alt="" class="img-fluid">
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <!-- Tweets section -->
+        <div class="grid-template container my-4" id="tweets-section" style="display: none;">
+            <h4>Tweets</h4>
+            <ul class="tweet-list">
+                {% for i in user_posts reversed %}
+                {%if i.post and not i.post_image%}
+                <li>
+                    <div class="col-md-8 mr-4 ml-n2">
+                        <p>{{i.post}} on {{i.post_date}} at {{i.post_time}}</p>
+                    </div>
+                </li>
+                {% endif %}
+                {% endfor %}
+                <!-- <li class="tweet">
+                <div class="tweet-author">
+                    <img src="/media/avatar2.jpg" alt="avatar" class="avatar">
+                    <span class="author-name">Jane Smith</span>
+                </div>
+                <div class="tweet-content">
+                    <p>Just had a great time at the beach. #sunshine #vacation</p>
+                </div>
+            </li> -->
+                <!-- Add more tweets as needed -->
+            </ul>
+        </div>
+        <!-- About Section -->
+        <div class="grid-template container my-4" id="about-section" style="display: none;">
+            <h4 class="mb-3 card-title">About </h4>
+
+            <p class="card-text"> <i class="fas fa-calendar-week mr-2"></i> Went to <a href="#"
+                    class="text-decoration-none">{{results_about.study}}</a></p>
+            <p class="card-text"> <i class="fas fa-user-friends mr-2"></i> Become a friend with <a href="#"
+                    class="text-decoration-none">{{results_user.name}}</a></p>
+            <p class="card-text"> <i class="far fa-building mr-2"></i> Work at <a href="#"
+                    class="text-decoration-none">{{results_about.work}}</a></p>
+            <p class="card-text"> <i class="fas fa-home mr-2"></i> Live in <a href="#"
+                    class="text-decoration-none">{{results_about.live}}</a></p>
+            <p class="card-text"> <i class="fas fa-map-marker mr-2"></i> From <a href="#"
+                    class="text-decoration-none">{{results_about.ufrom}}</a></p>
+        </div>
+        <!-- Friends Section -->
+        <div class="grid-template container my-4 mx-4" id="friends-section" style="display: none;">
+            <!-- <h4>Friends</h4> -->
+            <div class="row mt-3 d-flex">
+                <div class="col-md-6 mr-4">
+                    <h4 class="">Followers</h4>
+                    {% for i in followers %}
+                    <div class="item d-flex my-2">
+                        <div class="mr-1">
+                            <a href="{{ i.portfolio_img.url }}" data-lightbox="id">
+                                <img src="{{ i.portfolio_img.url }}" alt="" id="pro_pic"class="rounded-circle" width="60px"
+                                    height="60px">
+                            </a>
+                        </div>
+                        <div class="justify-content-center">
+                            <p class="font-weight-bold mb-n1">{{i.name}}</p>
+                            <p class="">@{{i.uname}}</p>
+                 <a data-ripple=""><button type="submit" class="btn btn-primary btn-sm"
+                                            style="background-color: #0b9deb; border: #0b9deb;">{{button_text}}</button></a>
+                                                    
+                        </div>
+                    <div class="justify-content-between mt-n2 ml-2">
+                        {% if i.name != data.name and results_user != data %}
+                                <form action="/follow" method="POST">
+                                    {% csrf_token %}
+                                    <div class="add-btn">
+                                        <input type="hidden" value="{{data.name}}" name="follower" />
+                                        <input type="hidden" value="{{i.name}}" name="user" />
+                                        <input type="hidden" value="{{q}}" name="q" />
+                                        <br>
+                                       </div>
+                                </form>
+                                {% endif %}
+                    </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class=" col-md-4 mr-4">
+                    <h4 class="">Following</h4>
+                    {% for i in following %}
+                    <div class="item d-flex my-2">
+                        <div class="mr-1">
+                            <a href="{{ i.portfolio_img.url }}" data-lightbox="id">
+                                <img src="{{ i.portfolio_img.url }}" alt="" id="pro_pic" class="rounded-circle" width="60px"
+                                    height="60px">
+                            </a>
+                        </div>
+                        <div class="justify-content-center">
+                            <p class="font-weight-bold mb-n1">{{i.name}}</p>
+                            <p class="">@{{i.uname}}</p>
+                                
+                        </div>
+                    <div class="justify-content-between mt-n2 ml-2">
+                        {% if i.name != data.name and results_user != data %}
+                                <form action="/follow" method="POST">
+                                    {% csrf_token %}
+                                    <div class="add-btn">
+                                        <input type="hidden" value="{{data.name}}" name="follower" />
+                                        <input type="hidden" value="{{i.name}}" name="user" />
+                                        <input type="hidden" value="{{q}}" name="q" />
+                                        <br>
+                                        <a data-ripple=""><button type="submit" class="btn btn-primary btn-sm"
+                                            style="background-color: #0b9deb; border: #0b9deb;">{{button_text}}</button></a>
+                                    </div>
+                                </form>
+                                {% endif %}
+                    </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+            <link rel=" stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+                                                                        <script
+                                                                            src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+                                                                        <script
+                                                                            src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+                                                                        <script>
+                                                                            function showSection(section) {
+                                                                                // Hide all sections
+                                                                                document.getElementById('photos-section').style.display = 'none';
+                                                                                document.getElementById('tweets-section').style.display = 'none';
+                                                                                document.getElementById('about-section').style.display = 'none';
+                                                                                document.getElementById('friends-section').style.display = 'none';
+
+                                                                                // Show the selected section
+                                                                                document.getElementById(section + '-section').style.display = 'block';
+                                                                            }
+
+                                                                        </script>
+                                                                        <script
+                                                                            src="https://kit.fontawesome.com/your-kit-id.js"
+                                                                            crossorigin="anonymous"></script>
+                                                                        <script
+                                                                            src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                                                                        <script>
+                                                                            $(document).ready(function () {
+                                                                                $('.follow-btn').click(function () {
+                                                                                    var user_id = $(this).data('user-id');
+                                                                                    var url = '/follow/' + user_id + '/';
+
+                                                                                    $.ajax({
+                                                                                        type: 'POST',
+                                                                                        url: url,
+                                                                                        dataType: 'json',
+                                                                                        success: function (response) {
+                                                                                            if (response.is_following) {
+                                                                                                $('.follow-btn[data-user-id="' + user_id + '"]').text('Unfollow');
+                                                                                            } else {
+                                                                                                $('.follow-btn[data-user-id="' + user_id + '"]').text('Follow');
+                                                                                            }
+                                                                                        },
+                                                                                        error: function (xhr, textStatus, error) {
+                                                                                            console.log(xhr.statusText);
+                                                                                        }
+                                                                                    });
+                                                                                });
+                                                                            });
+                                                                        </script>
+                                                                        </body>
+
+
+                                                                        {% endblock %}

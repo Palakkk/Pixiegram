@@ -1,0 +1,374 @@
+{% extends 'common.html' %}
+
+{% block content %}
+
+
+{% load static %}
+
+
+
+
+<!-------------------------------------------Start Grids layout for lg-xl-3 columns and (xs-lg 1 columns)--------------------------------->
+
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+
+    <body>
+
+        <div class="container">
+            <div class="row">
+                <!--------------------------left columns  start-->
+
+                <div class="col-12 col-lg-3" id="left-section">
+
+                    <div class="left-column">
+                        <div class="card card-left1 mb-4">
+                            {% if data.bg_img %}
+                            <img src="{{data.bg_img.url}}" alt="bg_img" class="card-img-top img-fluid">
+                            {% endif %}
+                            <div class="card-body text-center ">
+                                {% if data.portfolio_img %}
+                                <img src="{{data.portfolio_img.url}}" alt="img" id="pro_pic" width="120px"
+                                    height="120px" class="rounded-circle mt-n5">
+                                {% endif %}
+                                <h5 class="card-title">{{data.name}}</h5>
+                                <p class="card-text mb-2">{{data.bio}}</p>
+                                <ul class="list-unstyled nav justify-content-center">
+                                    <!-- <a href="#" class="text-dark text-decoration-none mr-1">
+                                <li class="nav-item">Friends <br> <strong>12M</strong></li>
+                            </a>
+                            <a href="#" class="text-dark text-decoration-none ml-1">
+                                <li class="nav-item">Enimes <br> <strong>1</strong></li>
+                            </a> -->
+                                </ul>
+
+                            </div>
+                        </div>
+
+
+                        <div class="card shadow-sm card-left2 mb-4">
+
+                            <div class="card-body">
+
+                                <h5 class="mb-3 card-title">About <small><a href="{% url 'edit_about1' %}"
+                                            class="ml-1">Edit</a></small></h5>
+
+                                <p class="card-text"> <i class="fas fa-calendar-week mr-2"></i> Went to {{user_about.study}}</p>
+                                <!-- <p class="card-text"> <i class="fas fa-user-friends mr-2"></i> Become a friend with <a
+                                        href="#" class="text-decoration-none">{{data.name}}</a></p> -->
+                                <p class="card-text"> <i class="far fa-building mr-2"></i>Works at {{user_about.work}}</p>
+                                <p class="card-text"> <i class="fas fa-home mr-2"></i>Lives in {{user_about.live}}</p>
+                                <p class="card-text"> <i class="fas fa-map-marker mr-2"></i> From {{user_about.ufrom}}</a></p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!--------------------------Ends Left columns-->
+
+
+                <!---------------------------------------Middle columns  start---------------->
+                <div class="col-12 col-lg-6" >
+                    <div class="middle-column">
+                        <div class="card-header card mb-2 bg-transparent">
+                            <form class="form-inline" method="post" >
+                                    {% csrf_token %}
+                                    <div class="input-group w-100">
+                                        <input type="text" name="post" id="post" placeholder="Create a post here!"
+                                            class="form-control form-control-md">
+
+                                        <div class="input-group-append">
+                                            <!-- <input type="file" id="media-input" style="display: none;"> -->
+                                            <div class="input-group-text">
+                                                <i class="fas fa-camera" id="upload-icon"></i>
+                                            </div>
+                                            <input type="file" name="media" id="media-input" accept="image/*, video/*"
+                                            class="form-control-file" style="display: none;">
+                                            
+                                        </div>
+                                        
+                                    </div>
+                                </form>
+                                
+                            </div>
+                            <div class="card mb-2" id="middle-section">
+
+                            {% for post in all_posts %}
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <img src="{{ post.user.portfolio_img.url }}" alt="profile picture"
+                                        class="rounded-circle" width="30px" height="30px">
+                                    <span class="ml-2">@{{ post.user.uname }}</span>
+                                </div>
+                                <div class="card-body p-0">
+                                    {% if post.post_image %}
+                                    <img src="{{post.post_image.url}}" alt="w-100" class="img-fluid">
+                                    {%elif post.post %}
+                                    <div class="m-2">
+                                        <strong>{{ post.user.name }}</strong> {{ post.post }}
+                                    </div>
+                                    {% endif %}
+
+                                    {% if post.post_video %}
+                                    <video src="{{post.post_video.url}}" class="img-fluid" controls></video>
+                                    {% endif %}
+                                </div>
+                                <div class="card-footer">
+                                    <div class="d-flex align-items-center">
+                                        <!-- Display the like button -->
+                                        {% if data in post.likes.all %}
+                                        <button class="unlike-button btn btn-lg btn-outline-secondary"
+                                            data-post-id="{{ post.id }}"><i class="fas fa-heart"></i></button>
+                                        {% else %}
+                                        <button class="like-button btn btn-lg btn-outline-secondary"
+                                            data-post-id="{{ post.id }}"><i class="far fa-heart"></i></button>
+                                        {% endif %}
+                                        <div class="btn-outline-secondary pl-1 mr-3 like-number"><span
+                                                id="like-count-{{ post.id }}">{{ post.likes.count }}</span></div>
+
+                                        <!-- Button to trigger the modal -->
+                                        <button class="btn btn-outline-secondary btn-lg ml-2 comment-button"
+                                            data-toggle="modal" data-target="#postModal{{ post.id }}"><i
+                                                class="far fa-comment"></i></button>
+
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="postModal{{ post.id }}" tabindex="-1" role="dialog"
+                                            aria-labelledby="postModalLabel{{ post.id }}" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="postModalLabel{{ post.id }}">
+                                                            Comments
+                                                        </h5>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+
+                                                    <!-- Comment section -->
+                                                    <div class="modal-body">
+                                                        <div class="comment-section">
+                                                            <!-- Display existing comments -->
+                                                            {% for comment in post_comments %}
+                                                            {% if comment.post == post%}
+                                                            {%for i in comment.comments%}
+                                                            <div class="comment mb-1">
+                                                                <p class="mb-n1 mt-2 font-increase">{{ i.text }}</p>
+                                                                <small class="text-black-50">Posted by @{{ i.user.uname }} at
+                                                                    {{ i.created_at }}</small>
+                                                            </div>
+                                                            {%endfor%}
+
+                                                            {%endif%}
+                                                            {% endfor %}
+
+                                                            <!-- Comment form -->
+                                                            <form class="comment-form pt-2" method="POST"
+                                                                action="{% url 'add_comment' %}">
+                                                                {% csrf_token %}
+                                                                <input type="hidden" name="post" value="{{ post.id }}">
+                                                                <div class="form-group d-flex">
+                                                                    <input class="form-control rounded-0" name="text"
+                                                                        placeholder="Write a comment"></input>
+                                                                    <button type="submit"
+                                                                        class="btn btn-outline-primary rounded-0">Post</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- <button class="btn btn-sm btn-outline-secondary ml-auto"><i
+                                        class="far fa-bookmark"></i></button> -->
+                                </div>
+                                {% if post.post_image %}
+                                <div class="m-2">
+                                    <strong>{{ post.user.name }}</strong> {{ post.post }}
+                                </div>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+
+                <br> <br> <br><br> <br> <br>
+
+                <!------------------------Middle column Ends---------------->
+
+
+                <!---------------------------Statrs Right Columns----------------->
+                <div class="col-12 col-lg-3" id="right-section">
+
+
+                    <div class="right-column">
+
+                        <div class="card shadow-sm mb-4">
+                            <div class="card-body">
+                                <h5 class="mb-0 card-title">Friend Suggestions</h5>
+                                {% for friend in all_data %}
+                                {% if friend not in following and friend != data %}
+                                <div class="d-flex my-4 align-content-center">
+                                    <img src="{{friend.portfolio_img.url}}" alt="card-img" class="rounded-circle mr-3"
+                                        id="pro_pic" height="70px" width="70px">
+                                    <div class="">
+                                        <p class="card-text mb-n1 pb-1"> <span class="h6">{{friend.name}}</p>
+                                        <span class="h6 font-weight-light">@{{friend.uname}}<br>
+                                            <!-- <div class="">
+                                                <a href="#"
+                                                    class="btn btn-outline-success card-link px-3 font-weight-bold my-1 ">Follow</a>
+                                            </div> -->
+                                            <form action="/follow" method="POST">
+                                                {% csrf_token %}
+                                                <div class="add-btn mt-n3">
+
+                                                    {% if results_user != data %}
+                                                    <!-- <input type="hidden" value="{{data.name}}" name="follower" />
+                                                    <input type="hidden" value="{{friend.name}}" name="user" /> -->
+                                                    <!-- <input type="hidden" value="{{q}}" name="q" /> -->
+                                                    <br>
+                                                    <a data-ripple=""><button type="submit" class="btn btn-primary"
+                                                        style="background-color: #0b9deb; border: #0b9deb;">{{button_text}}</button></a>
+                                                {% endif %}
+                                                </div>
+                                            </form>
+                                    </div>
+                                </div>
+
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+
+                        </div>
+
+
+                        <div class=" card shadow-sm mb-4">
+
+                                                            <div class="card-footer">
+
+                                                                <p class="lead" style="font-size:18px;">Hope you are
+                                                                    enjoying it. We are constantly
+                                                                    trying to improve. </p>
+                                                            </div>
+                                                </div>
+                                                <div class="card shadow-sm">
+                                                    <div class="card-body">
+                                                        <p>&copy; 2023 Pixegram
+
+
+
+                                                            <a href="#">About</a>
+                                                            <a href="#">Help</a>
+                                                            <a href="#">Terms</a>
+                                                            <a href="#">Privacy</a>
+                                                            <a href="#">Cookies</a>
+                                                            <a href="#">Ads </a>
+                                                            <a href="#">Info</a>
+                                                            <a href="#">Brand</a>
+                                                            <a href="#">Blog</a>
+                                                            <a href="#">Status</a>
+                                                            <a href="#">Apps</a>
+                                                            <a href="#">Jobs</a>
+                                                            <a href="#">Advertise</a>
+
+                                                        </p>
+                                                    </div>
+
+                                                </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.slim.min.js"></script>
+                        <script
+                            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+                        <script
+                            src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+                        <script>
+                            $(document).ready(function () {
+                                $('#upload-icon').click(function () {
+                                    $('#media-input').click();
+                                });
+                            });
+
+                            $(document).ready(function () {
+                                $('.like-button, .unlike-button').on('click', function (e) {
+                                    e.preventDefault();
+                                    var button = $(this);
+                                    var post_id = button.data('post-id');
+                                    var action = (button.hasClass('like-button')) ? 'like' : 'unlike';
+
+                                    $.ajax({
+                                        type: 'POST',
+                                        url: '/like_post/' + post_id,
+                                        data: {
+                                            'action': action,
+                                            'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+                                        },
+                                        success: function (response) {
+                                            // Update the like count
+                                            var likeCountElement = $('#like-count-' + post_id);
+                                            likeCountElement.text(response.like_count);
+
+                                            // Toggle the liked class
+                                            button.toggleClass('liked', response.is_liked);
+
+                                            // Update the button text and icon
+                                            // button.text(response.is_liked ? 'Unlike' : 'Like');
+                                            var icon = button.find('i');
+                                            icon.removeClass('far').addClass(response.is_liked ? 'fas' : 'far');
+
+
+                                            window.location.href = response.redirect_url;
+                                        },
+                                        error: function (xhr, textStatus, errorThrown) {
+                                            // Handle error response
+                                        }
+                                    });
+                                });
+                            });
+
+                        </script>
+                        <script>
+                            $(document).ready(function () {
+                                $('.follow-btn').click(function () {
+                                    var user_id = $(this).data('user-id');
+                                    var url = '/follow/' + user_id + '/';
+
+                                    $.ajax({
+                                        type: 'POST',
+                                        url: url,
+                                        dataType: 'json',
+                                        success: function (response) {
+                                            if (response.is_following) {
+                                                $('.follow-btn[data-user-id="' + user_id + '"]').text('Unfollow');
+                                            } else {
+                                                $('.follow-btn[data-user-id="' + user_id + '"]').text('Follow');
+                                            }
+                                        },
+                                        error: function (xhr, textStatus, error) {
+                                            console.log(xhr.statusText);
+                                        }
+                                    });
+                                });
+                            });
+                        </script>
+
+    </body>
+
+</html>
+{%endblock%}

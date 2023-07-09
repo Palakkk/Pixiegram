@@ -1,0 +1,73 @@
+{% extends 'common.html' %}
+
+{% block content %}
+
+{% load static %}
+
+<div class="">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title h4">Login</div>
+
+                <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+                <!-- <a href="{% url 'index' %}" class="close">&times;</a> -->
+
+            </div>
+
+
+            <div class="modal-body p-5">
+
+                <!-- Pills content -->
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="pills-login" role="tabpanel" aria-labelledby="tab-login">
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+
+                            <!-- Email input -->
+                            <div class="form-outline mb-4">
+                                <input type="email" id="email" name="email" class="form-control" />
+                                <label class="form-label" for="loginName">Email</label>
+                            </div>
+
+                            <!-- Password input -->
+                            <div class="form-outline mb-4">
+                                <input type="password" id="password" name="password" class="form-control" />
+                                <label class="form-label" for="loginPassword">Password</label>
+                            </div>
+
+                             <!-- Submit button -->
+                             <input type="submit" class="btn btn-primary btn-block mb-4" style="background-color:#073b4c" value="Sign in">
+
+                            <!-- 2 column grid layout -->
+                            <div class="text-center">
+                                <div class="justify-content-center">
+                                    <!-- Simple link -->
+                                    <a href="{% url 'forgot' %}" style="color:#073b4c">Forgot password?</a>
+                                </div>
+                            </div>
+
+                           <br>
+                            <!-- Register buttons -->
+                            <div class="text-center">
+                                <p>Not a member? <a href="{% url 'register1' %}" style="color:#073b4c">Register</a></p>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- Submit button -->
+                    <!-- <button type="submit" class="btn btn-primary btn-block mb-3">Register</button> -->
+                    </form>
+                </div>
+            </div>
+            <!-- //main content -->
+            {% if message %}
+            <script>alert("{{message}}")</script>{% endif %}
+
+        </div>
+    </div>
+</div>
+
+</div>
+<!-- fontawesome v5-->
+<script src="{% static 'js/fontawesome.js' %} "></script>
+{% endblock %}
